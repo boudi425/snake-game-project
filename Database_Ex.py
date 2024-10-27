@@ -9,7 +9,9 @@ def clear_screen():
     os.system("cls")
 Conn = sqlite3.connect("Player_Data.db")
 Cur = Conn.cursor()
-Cur.executescript("Data_Query.sql")
+with open("Data_Query.sql", "r") as File:
+    Query = File.read()
+#Cur.execute(Query)
 class Sign_Up_User:
     def Sign_up_Username(self):
         print("Hello, This is the sign up page")
@@ -83,7 +85,7 @@ class System:
     def set_up_sign_up(self):
             Username = self.Sign_Up.Sign_up_Username()
             Password = self.Sign_Up.Sign_Up_Password()
-            df = pd.read_sql_query(f"INSERT INTO Data VALUES ({Username}, {Password}, 0)", Conn)
+            df = pd.read_sql_query("INSERT INTO Data VALUES (?, ?, 0)", Conn, params=(Username, Password))
             Conn.commit()
             
     def set_up_Login(self):
@@ -132,3 +134,7 @@ class System:
                     Num_Guesses -= 1
     def Quit(self):
         sys.exit()
+        
+        
+Sys = System()
+Sys.set_up_Users()
