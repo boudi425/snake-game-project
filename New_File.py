@@ -1,1 +1,3 @@
 #Put Your code down here......
+List = ["Dog", "Cat", "Woman"]
+print(len(List))
