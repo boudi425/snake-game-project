@@ -1,4 +1,6 @@
-CREATE TABLE Questions (
-    Question TEXT,
-    Answer TEXT
+CREATE TABLE IF NOT EXISTS Data (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT,
+    Password TEXT,
+    Score INTEGER
 );

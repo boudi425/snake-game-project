@@ -7,11 +7,12 @@ import os
 import random
 def clear_screen():
     os.system("cls")
-Conn = sqlite3.connect("Player_Data.db")
+Conn = sqlite3.connect("Data.db")
 Cur = Conn.cursor()
 with open("Data_Query.sql", "r") as File:
     Query = File.read()
-#Cur.execute(Query)
+Cur.execute(Query)
+Conn.commit()
 class Sign_Up_User:
     def Sign_up_Username(self):
         print("Hello, This is the sign up page")
@@ -19,7 +20,7 @@ class Sign_Up_User:
         print("Enter your name: ")
         while True:
             Sign_up_Username = input("> ")
-            if len(Sign_up_Username) < 5:
+            if len(Sign_up_Username) <= 5:
                 print("Please Enter a name longer than 5")
             else:
                 return Sign_up_Username
@@ -28,17 +29,16 @@ class Sign_Up_User:
         print("Enter your password: ")
         while True:
             Sign_up_Password = input("> ")
-            if len(Sign_up_Password) < 8:
+            if len(Sign_up_Password) <= 8:
                 print("Please Enter a name longer than 8")
             else:
                 return Sign_up_Password
             
 class Login_User:
-    def Login_Username():
+    def Login_Username(self):
         print("Hello This is the Login page")
         input("Press Enter to continue..")
         print("Enter your name: ")
-        Name_login = input(">")
         while True:
             Name_login = input("> ")
             if len(Name_login) <= 5:
@@ -49,7 +49,7 @@ class Login_User:
     def Login_password(self):
         print("Enter your password:")
         while True:
-            password_login = input("> ")
+            password_login = input(">")
             if len(password_login) <= 8:
                 print("Please Enter at a least more than 8 characters")
             else:
@@ -64,75 +64,90 @@ class System:
         print("Otherwise you did get the guess wrong you will lose 3 points")
         print("And to make it fair you have attempts to do it up to 3 attempts")
         print("Your score will be saved so make sure to sign up and login...")
-        input("Press Enter to continue")
+        input("Press Enter to continue......... ")
         clear_screen()
         print("Please Choose from the Following: ")
         print("1.Sign up")
         print("2. Login")
         print("3. Quit")
         while True:
-            choice = input(">")
+            choice = input("> ")
             if choice == "1" or choice.capitalize().startswith("S"):
                 self.set_up_sign_up()
                 self.set_up_Login()
-                self.start_game()
+                break
             elif choice == "2" or choice.capitalize().startswith("L"):
                 self.set_up_Login()
-                self.start_game()
+                break
             else:
                 self.Quit()    
                       
     def set_up_sign_up(self):
+        while True:
             Username = self.Sign_Up.Sign_up_Username()
-            Password = self.Sign_Up.Sign_Up_Password()
-            df = pd.read_sql_query("INSERT INTO Data VALUES (?, ?, 0)", Conn, params=(Username, Password))
-            Conn.commit()
+            Name = Cur.execute("SELECT Name FROM Data WHERE Name = ?", (Username,))
+            result = Name.fetchone()
+            if Username == result:
+                print("SOMEONE IS ALREADY HAS THIS NAME PLEASE CHANGE IT")
+                continue
+            else:
+                break
+        Password = self.Sign_Up.Sign_Up_Password()
+        Cur.execute("INSERT INTO Data (Name, Password, Score) VALUES (?, ?, 0)", (Username, Password,))
+        Conn.commit()
             
     def set_up_Login(self):
-        df = pd.read_sql_query("SELECT NAME FROM Data", Conn)
-        if len(df) == 0:
-            print("NO SIGN UP NAME IS HERE PLEASE GO AND SIGN UP!")
-            return 
+        global Login_Name
+        Names = Cur.execute("SELECT Name FROM Data")
+        if len(Names.fetchall()) == 0:
+            print("NO NAMES IN THE DB PLEASE SIGN UP FIRST")
+            self.set_up_sign_up()
         while True:
             try:
-                Username_Login = self.Login.Login_Username()
-                query = "SELECT Name, Password, Score FROM Data WHERE Name = ?"
-                df = pd.read_sql_query(query, Conn, params=(Username_Login,))
-                if df.empty:
-                    print("Please enter a valid name.")
+                Login_Name = self.Login.Login_Username()
+                True_Login_Name = Cur.execute("SELECT Name FROM Data WHERE Name = ?", (Login_Name.capitalize(),))
+                Result = True_Login_Name.fetchone()
+                if Login_Name == Result[0]:
+                    print("Login Successfully....")
+                    break
                 else:
-                    print("Login successful!")
-                    break 
+                    print("Login Failed please Try again")
             except sqlite3.Error:
-                print("Please Enter a valid name")
-            finally:
-                Conn.close()
+                print("I hate myself")
+        self.start_game()
     def start_game(self):
         print("I will ask general questions and i want you to answer it")
         print("You have only 3 attempts so be careful")
-        Questions = Cur.execute("SELECT Question FROM Questions")
-        Questions_List = Questions.fetchall()
+        input("Press Enter to Start")
+        Questions = Cur.execute("SELECT question FROM Questions")
+        Questions_List = Questions.fetchall() 
         Questions_Len = len(Questions_List)
+        Num_Guesses = 3
+        Score = 0
         while True:
-            Index = random.randint(0, Questions_Len)
-            Num_Guesses = 3
-            Score = 0
+            Index = random.randint(0, Questions_Len-1)
             print(f"{Questions_List[Index]}")
             print("Enter your answer: ")
-            while Num_Guesses < 0:
-                Answer = input(">")
-                True_Answer = pd.read_sql_query("SELECT Answer FROM Questions WHERE Question = ?", Conn, params=(Questions_List[Index]))
-                if Answer == True_Answer:
-                    print("You Did it Correct !")
-                    Score += 3
-                elif Answer != True_Answer and Num_Guesses == 0:
-                    self.Quit()
-                    
-                else:
-                    print("Wrong answer, Try again")
-                    Score -= 3
-                    Num_Guesses -= 1
+            Answer = input("> ")
+            True_Answer = Cur.execute("SELECT answer FROM Questions WHERE question = ?", (Questions_List[Index])).fetchone()
+            if Answer.capitalize() == True_Answer[0]:
+                print("You Did it Correct !")
+                Score += 3
+            elif Answer.capitalize() != True_Answer[0] and Num_Guesses == 0:
+                if Score < 0:
+                    Score = 0
+                Cur.execute("UPDATE Data SET Score = ? WHERE Name = ? ", (Score, Login_Name))
+                Scores = Cur.execute("SELECT Score FROM Data WHERE Name = ?", (Login_Name,))
+                print(f"Your score is {Scores.fetchone()}")
+                self.Quit()
+            elif Answer.capitalize() != True_Answer[0]:
+                print(f"Wrong answer, The correct answer is {True_Answer[0]}")
+                Score -= 3
+                Num_Guesses -= 1
     def Quit(self):
+        print("Thanks for using my game")
+        Conn.commit()
+        Conn.close()
         sys.exit()
         
         
