@@ -1,30 +1,51 @@
+# Importing Modules
 from tkinter import *
+from tkinter import ttk
 import sqlite3
 import sys
 import os
-Window = Tk()
-Window.geometry("600x600")
-Window.title("Snake Game menu")
-Conn = sqlite3.connect("Player_Data.db")
-Cur = Conn.cursor()
+Window = Tk() # The screen
+Window.geometry("600x600") # Screen Dimensions
+Window.title("Snake Game menu") # Screen Title
+Conn = sqlite3.connect("Player_Data.db") #Connect/Opens the Database
+Cur = Conn.cursor() # Get The cursor for more complex methods
 with open("Menu_DB_Queries.sql", "r") as Sql_Query:
-    Query = Sql_Query.read()
-Cur.execute(Query)
-Conn.commit()
+    Query = Sql_Query.read() #Read the Main Query 
+Cur.execute(Query) # Create the Table
+Conn.commit() # Commit the Change
+#-------------------------------------------------
 
-class Menu:
-    def start_menu(self):
+class Menu: # Class for more Functionality
+    def start_menu(self): # Make the Start Menu
         Heading = Label(Window, text="Welcome to the game", font=("Helvetica", 16, "bold"), justify=CENTER, background="black")
         Start_button = Button(Window, text="Start Game", width=200, height=100, background="red", font=("Arial", 20, "blod"))
         Leaderboard_button = Button(Window, text="Leaderboard", width=200, height=100, background="yellow", font=("Arial", 20, "blod"))
         Quit_button = Button(Window, text="Quit Game", width=200, height=100, background="blue", font=("Arial", 20, "blod"), command=self.quit_message())
-    def quit_message(self, quit_file):
+        #Doing the Graphices and Buttons !
+    def start_game_Window(self): # The actual Start Game Menu for the game
+        Start_Game_Window = Tk()
+        Start_Game_Window.geometry("600x600")
+        Start_Game_Window.title("Snake Game")
+        Heading = Label(Start_Game_Window, text="Start Game Menu", font=("Helvetica", 16, "bold"), justify=CENTER, background="black")
+        Name = Text(Start_Game_Window, text="Enter your name", font=("Helvetica", 16, "bold"), color="blue")
+        Name_str = StringVar()
+        Name_Entry = Entry(Start_Game_Window, textvariable=Name_str, font=("Helvetica", 16, "bold"), color="blue")
+        # Name Input for the Data Analyze
+        Diffcuilty = Label(Start_Game_Window, text="Choose Your Diffcuilty", font=("Helvetica", 16, "bold"))
+        Combox_Str = StringVar()
+        Diffcuilty_ComboBox = ttk.Combobox(Start_Game_Window, width=10, textvariable=Diffcuilty_ComboBox)
+        Diffcuilty_ComboBox["values"] = ("Easy", "Medium", "Hard", "Extreme")
+        #Combobox for limitng choices for the user , For more simple Manipulation and for less Errors
+        button = button = ttk.Button(Start_Game_Window, text="Sumbit")
+        #Sumbit Button for the insert of the data
+    def quit_message(self, quit_file): #Quit Meny With A good feedback and a Web Page!
         Quit_window = Tk()
         Quit_window.geometry("300x300")
         quit_heading = Label(Quit_window, text="Thanks for using my program", font=("Helvetica", 16, "bold"), justify=CENTER, background="black")
         Quit_Button =  Button(Quit_window, text="Quit", font=("Arial", 20, "blod"), command=Quit_window.destroy)
-        Feedback_button = Button(Quit_window, text="Give A Feedback!", font=("Arial", 20, "blod"), command=Open_url())
-        
+        #Close the Whole programm when clicked on Quit
+        Feedback_button = Button(Quit_window, text="Give A Feedback!", font=("Arial", 20, "blod"), command=Open_url(quit_file))
+        #Open the Web if the user choosed 'Give A Feedback!'
 #Shows the Start button, leaderboard button, quit button
 #Every one of these will do it's job and for sure the start one will be more complex
 #We will need Entries , Sumbit buttons , Back button , Alot of windows i think
