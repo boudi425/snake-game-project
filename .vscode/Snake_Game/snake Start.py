@@ -47,6 +47,7 @@ class Snake:#create class snake
           new_body.shape("circle")
           new_body.goto(4,0)
           new_body.penup()
+          add_body.append(body)
        
 
           
