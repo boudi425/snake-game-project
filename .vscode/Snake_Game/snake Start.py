@@ -40,6 +40,13 @@ class Snake:#create class snake
 
     def snake_add_body(self):
        add_body=[]
+       for body in add_body:
+          new_body=turtle.Turtle()
+          new_body.speed(0)
+          new_body.color("red")
+          new_body.shape("circle")
+          new_body.goto(4,0)
+          new_body.penup()
        
 
           
