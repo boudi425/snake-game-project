@@ -1,15 +1,16 @@
 import turtle #importing turtle module
 import random #importing random module
+import os #importing os module
+import sys #importing sys module
 
 
- 
-def display_screen(self): #creating the screen
 
-    wind=turtle.Screen() #activate the function
-    wind.title(" welcome to snake game ") #set the title
-    wind.bgcolor("black") #set the color
-    wind.tracer(0) #control the window
-    wind.setup(width=800,height=600) #set the widths and height of window
+
+wind=turtle.Screen() #activate the function
+wind.title(" welcome to snake game ") #set the title
+wind.bgcolor("black") #set the color
+wind.tracer(0) #control the window
+wind.setup(width=800,height=600) #set the widths and height of window
 
 
 class Snake:#create class snake
@@ -21,7 +22,8 @@ class Snake:#create class snake
      snake_head.shape("circle") #set snake's head shape 
      snake_head.goto(0,0) #set snake's head coordinates
      snake_head.penup() #delete the line after moving
-     snake_head.color("red") #set snake's head color 
+     snake_head.color("red") #set snake's head color
+      
      #set snake body
      snake_body=turtle.Turtle() #set the object
      snake_body.speed(0) #set the snake's body speed
@@ -49,23 +51,6 @@ class Snake:#create class snake
           new_body.penup()
           add_body.append(body)
        
-
-          
-          
-
-
-
-        
-     
-
-       
-        
-
-
-   
-     
-    
-
 class Food:#create class food
    
    def food(self): #set the food
@@ -86,3 +71,6 @@ class Food:#create class food
       return 3
       
 
+class Game:
+   while True:
+      wind.update()
