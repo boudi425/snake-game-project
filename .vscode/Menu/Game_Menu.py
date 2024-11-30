@@ -1,4 +1,5 @@
 # Importing Modules
+from tkinter import messagebox
 from tkinter import *
 from tkinter import ttk
 import sqlite3
@@ -27,16 +28,19 @@ class Menu: # Class for more Functionality
         Start_Game_Window.geometry("600x600")
         Start_Game_Window.title("Snake Game")
         Heading = Label(Start_Game_Window, text="Start Game Menu", font=("Helvetica", 16, "bold"), justify=CENTER, background="black")
-        Name = Text(Start_Game_Window, text="Enter your name", font=("Helvetica", 16, "bold"), color="blue")
-        Name_str = StringVar()
-        Name_Entry = Entry(Start_Game_Window, textvariable=Name_str, font=("Helvetica", 16, "bold"), color="blue")
+        #----------------------------------------------------------------------------------
+        Name = Text(Start_Game_Window, text="Enter your name ", font=("Helvetica", 16, "bold"), color="blue")
+        Name_Entry = Entry(Start_Game_Window, font=("Helvetica", 16, "bold"), color="blue")
+        Password = Text(Start_Game_Window, text="Enter your Password ", font=("Helvetica", 16, "bold"), color="blue")
+        Password_Entry = Entry(Start_Game_Window, font=("Helvetica", 16, "bold"), color="blue", show="*")
         # Name Input for the Data Analyze
+        #-------------------------------------------------------------------
         Diffcuilty = Label(Start_Game_Window, text="Choose Your Diffcuilty", font=("Helvetica", 16, "bold"))
         Combox_Str = StringVar()
         Diffcuilty_ComboBox = ttk.Combobox(Start_Game_Window, width=10, textvariable=Diffcuilty_ComboBox)
         Diffcuilty_ComboBox["values"] = ("Easy", "Medium", "Hard", "Extreme")
         #Combobox for limitng choices for the user , For more simple Manipulation and for less Errors
-        button = button = ttk.Button(Start_Game_Window, text="Sumbit")
+        button = ttk.Button(Start_Game_Window, text="Sumbit", command=self.Insert_Data(Start_Game_Window))
         #Sumbit Button for the insert of the data
     def quit_message(self, quit_file): #Quit Meny With A good feedback and a Web Page!
         Quit_window = Tk()
@@ -45,6 +49,30 @@ class Menu: # Class for more Functionality
         Quit_Button =  Button(Quit_window, text="Quit", font=("Arial", 20, "blod"), command=Quit_window.destroy)
         #Close the Whole programm when clicked on Quit
         Feedback_button = Button(Quit_window, text="Give A Feedback!", font=("Arial", 20, "blod"), command=Open_url(quit_file))
+    def Insert_Data(self, Master):
+        Text_name = Entry.get()
+        Password = Entry.get()
+        if Text_name.strip() == "":
+            messagebox.showwarning("Warning", "Entry is Empty")
+            return
+        if Password.strip() == "":
+            messagebox.showwarning("Warning", "Entry is Empty")
+            return
+        try:
+            while True:
+                Names = Cur.execute("SELECT Name FROM Data").fetchall()
+                if Text_name in Names:
+                    messagebox.showwarning("Warning", f"The username: {Text_name} is already used Try Something else!")
+                else:
+                    break
+            Cur.execute("INSERT INTO Data (Name, Password, Score) VALUES (?, ?, ?)", (Text_name, Password, 0))
+            messagebox.showinfo("Success", f"The user {Text_name} has been inserted")
+            Entry.delete(0, "end")
+        except Exception:
+            print(f"Failed to Insert")
+    def Get_Diffcuilty(self):
+        Combo_Box_Choice = ttk.Combobox.get()
+        return Combo_Box_Choice
         #Open the Web if the user choosed 'Give A Feedback!'
 #Shows the Start button, leaderboard button, quit button
 #Every one of these will do it's job and for sure the start one will be more complex
