@@ -31,7 +31,7 @@ class Snake:#create class snake
      self.snake_body.shape("circle") #set the snake's body shape
      self.snake_body.goto(2,0) #set the snake's body coordinates
      self.snake_body.penup() #delete the line after moving
-     self.snake_body.shapesize(stretch_wid=1,stretch_len=5) #stretch the widths by muiltiplying 5 x 20 
+    
      #set snake tail
      self.snake_tail=turtle.Turtle() #set the object
      self.snake_tail.speed(0) #set the snake's tail speed
@@ -129,9 +129,31 @@ class Food:#create class food
 
 class Game:
    while True:
-      wind.update()
-      snake=Snake()
-      food=Food()
+      def __init__(self):
+       self.snake=Snake()
+       self.food=Food()
+       self.food.food()
+       self.snake.init_movement()
+
+      def play_game(self):
+         wind.update()
+         self.food.random_food()
+         self.snake.init_movement()
+         if (self.snake.snake_head.xcor()>390 or self.snake.snake_head.xcor()<-390 or self.snake.snake_head.ycor()>290 or self.snake.snake_head.ycor()<-290):
+            with open("Game_Menu.py","r") as file:
+               self.code=file.read()
+               exec(self.code)
+               self.code
+               
+               
+                   
+
+
+
+
+      
+     
+      
       
 
 
