@@ -1,10 +1,16 @@
 import turtle #importing turtle module
 import random #importing random module
 import os #importing os module
-import sys #importing sys module
+import sys
+from pathlib import Path
 
+# Get the parent folder's path
+parent_path = Path(__file__).parent.parent
+sys.path.append(str(parent_path))
 
+from Menu import Tkinter_Start
 
+print(Tkinter_Start.Test_Importing())
 
 wind=turtle.Screen() #activate the function
 wind.title(" welcome to snake game ") #set the title

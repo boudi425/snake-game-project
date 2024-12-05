@@ -74,6 +74,8 @@ class Menu: # Class for more Functionality
         Combo_Box_Choice = ttk.Combobox.get()
         return Combo_Box_Choice
         #Open the Web if the user choosed 'Give A Feedback!'
+def Test_Importing():
+    return "I DID IT!!!"
 #Shows the Start button, leaderboard button, quit button
 #Every one of these will do it's job and for sure the start one will be more complex
 #We will need Entries , Sumbit buttons , Back button , Alot of windows i think
