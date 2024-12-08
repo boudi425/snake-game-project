@@ -5,15 +5,21 @@ from tkinter import ttk
 import sqlite3
 import sys
 import os
+from pathlib import Path
+
+# Get the parent folder's path
+parent_path = Path(__file__).parent.parent
+sys.path.append(str(parent_path))
 Window = Tk() # The screen
 Window.geometry("600x600") # Screen Dimensions
 Window.title("Snake Game menu") # Screen Title
 Conn = sqlite3.connect("Player_Data.db") #Connect/Opens the Database
 Cur = Conn.cursor() # Get The cursor for more complex methods
-with open("Menu_DB_Queries.sql", "r") as Sql_Query:
-    Query = Sql_Query.read() #Read the Main Query 
-Cur.execute(Query) # Create the Table
-Conn.commit() # Commit the Change
+def start_project():
+    with open("Menu_DB_Queries.sql", "r") as Sql_Query:
+        Query = Sql_Query.read() #Read the Main Query 
+    Cur.execute(Query) # Create the Table
+    Conn.commit() # Commit the Change
 #-------------------------------------------------
 
 class Menu: # Class for more Functionality
