@@ -10,6 +10,7 @@ from pathlib import Path
 # Get the parent folder's path
 parent_path = Path(__file__).parent.parent
 sys.path.append(str(parent_path))
+from Importatnt_Functions import Start
 Window = Tk() # The screen
 Window.geometry("600x600") # Screen Dimensions
 Window.title("Snake Game menu") # Screen Title
@@ -48,13 +49,13 @@ class Menu: # Class for more Functionality
         #Combobox for limitng choices for the user , For more simple Manipulation and for less Errors
         button = ttk.Button(Start_Game_Window, text="Sumbit", command=self.Insert_Data(Start_Game_Window))
         #Sumbit Button for the insert of the data
-    def quit_message(self, quit_file): #Quit Meny With A good feedback and a Web Page!
+    def quit_message(self, quit_file="Game_Web.html"): #Quit Meny With A good feedback and a Web Page!
         Quit_window = Tk()
         Quit_window.geometry("300x300")
         quit_heading = Label(Quit_window, text="Thanks for using my program", font=("Helvetica", 16, "bold"), justify=CENTER, background="black")
         Quit_Button =  Button(Quit_window, text="Quit", font=("Arial", 20, "blod"), command=Quit_window.destroy)
         #Close the Whole programm when clicked on Quit
-        Feedback_button = Button(Quit_window, text="Give A Feedback!", font=("Arial", 20, "blod"), command=Open_url(quit_file))
+        Feedback_button = Button(Quit_window, text="Give A Feedback!", font=("Arial", 20, "blod"), command=Start.Open_Url())
     def Insert_Data(self, Master):
         Text_name = Entry.get()
         Password = Entry.get()
