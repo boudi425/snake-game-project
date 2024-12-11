@@ -1,13 +1,14 @@
 import turtle #importing turtle module
 import random #importing random module
 import os #importing os module
-import sys #importing sys module
-
+import sys
+from Menu import Game_Menu
+sys.path.insert(0, '/.vscode/Menu/')
 
 
 
 wind=turtle.Screen() #activate the function
-wind.title(" welcome to snake game ") #set the title
+wind.title(" snake game ") #set the title
 wind.bgcolor("black") #set the color
 wind.tracer(0) #control the window
 wind.setup(width=800,height=600) #set the widths and height of window
@@ -92,10 +93,10 @@ class Snake:#create class snake
     
     def init_movement(self):
        wind.listen()
-       wind.onkey(self.sn_up,"Up")
-       wind.onkey(self.sn_down,"Down")
-       wind.onkey(self.sn_right,"Right")
-       wind.onkey(self.sn_left,"Left")
+       wind.onkey(self.sn_up(),"Up")
+       wind.onkey(self.sn_down(),"Down")
+       wind.onkey(self.sn_right(),"Right")
+       wind.onkey(self.sn_left(),"Left")
 
 
 
@@ -104,21 +105,21 @@ class Snake:#create class snake
 
 class Food:#create class food
    
-   def food(self): #set the food
+   def food(self):
 
-    food=turtle.Turtle() #set the object
-    food.shape("circle") #set the shape
-    food.color("blue")  #set the color
-    food.penup()  #delete the line after moving
-    food.goto(0,100) #set cood=rdinates
-    return 1
+     self.foodd=turtle.Turtle() #set the object
+     self.foodd.shape("circle") #set the shape
+     self.foodd.color("blue")  #set the color
+     self.foodd.penup()  #delete the line after moving
+     self.foodd.goto(0,100) #set coorddinates
+     return 1
    
    def super_food(self):
-      sup_food=turtle.Turtle() #set the object
-      sup_food.shape("circle") #set the shape
-      sup_food.color("blue")  #set the color
-      sup_food.penup()  #delete the line after moving
-      sup_food.goto(0,100) #set cood=rdinates
+      self.sup_food=turtle.Turtle() #set the object
+      self.sup_food.shape("circle") #set the shape
+      self.sup_food.color("blue")  #set the color
+      self.sup_food.penup()  #delete the line after moving
+      self.sup_food.goto(0,100) #set cood=rdinates
       return 3
       
 
@@ -132,18 +133,35 @@ class Game:
       def __init__(self):
        self.snake=Snake()
        self.food=Food()
-       self.food.food()
        self.snake.init_movement()
 
       def play_game(self):
-         wind.update()
-         self.food.random_food()
-         self.snake.init_movement()
-         if (self.snake.snake_head.xcor()>390 or self.snake.snake_head.xcor()<-390 or self.snake.snake_head.ycor()>290 or self.snake.snake_head.ycor()<-290):
-            with open("Game_Menu.py","r") as file:
-               self.code=file.read()
-               exec(self.code)
-               self.code
+       wind.update()
+
+       self.food.random_food()
+
+       self.snake.init_movement()
+
+       self.snake.movement()
+
+       if self.snake.snake_head.distance(self.food.food()):
+          self.snake.snake_add_body()
+          self.food.random_food()
+
+       if self.snake.snake_head.distance(self.food.super_food()):
+          self.snake
+
+       if (self.snake.snake_head.xcor()>390 or self.snake.snake_head.xcor()<-390 or self.snake.snake_head.ycor()>290 or self.snake.snake_head.ycor()<-290):
+            os.path/"Game_menu.py"
+            Game_Menu.Menu.quit_message()
+
+
+         
+            
+            
+
+        
+           
                
                
                    
