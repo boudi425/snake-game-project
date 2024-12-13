@@ -60,18 +60,18 @@ class Snake:#create class snake
           add_body.append(body)
 
     
-    def movement(self):
-       self.direction="stop"
-       if self.direction=="up":
+    def movement(self, direction):
+       direction="stop"
+       if direction=="up":
           self.snake_head.sety(self.snake_head.ycor()+20)
        
-       if self.direction=="down":
+       if direction=="down":
           self.snake_head.sety(self.snake_head.ycor()-20)
 
-       if self.direction=="left":
+       if direction=="left":
           self.snake_head.setx(self.snake_head.xcor()-20)
 
-       if self.direction=="right":
+       if direction=="right":
           self.snake_head.setx(self.snake_head.xcor()+20)
 
 
@@ -134,7 +134,7 @@ class Food:#create class food
 
 
 class Game:
-   while True:
+  
       def __init__(self):
        self.snake=Snake()
        self.food=Food()
@@ -142,10 +142,11 @@ class Game:
        self.snake.init_movement()
 
       def play_game(self):
-         wind.update()
-         self.food.random_food()
-         self.snake.init_movement()
-         if (self.snake.snake_head.xcor()>390 or self.snake.snake_head.xcor()<-390 or self.snake.snake_head.ycor()>290 or self.snake.snake_head.ycor()<-290):
+         while True:
+          wind.update()
+          self.food.random_food()
+          self.snake.init_movement()
+          if (self.snake.snake_head.xcor()>390 or self.snake.snake_head.xcor()<-390 or self.snake.snake_head.ycor()>290 or self.snake.snake_head.ycor()<-290):
             with open("Game_Menu.py","r") as file:
                self.code=file.read()
                exec(self.code)
