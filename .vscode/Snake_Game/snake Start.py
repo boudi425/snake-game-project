@@ -150,7 +150,7 @@ class Game:
 
        if self.snake.snake_head.distance(self.food.super_food()):
           self.snake
-
+#Make the losing condtion 790 for x axis and 590 for y axis
        if (self.snake.snake_head.xcor()>390 or self.snake.snake_head.xcor()<-390 or self.snake.snake_head.ycor()>290 or self.snake.snake_head.ycor()<-290):
             os.path/"Game_menu.py"
             Game_Menu.Menu.quit_message()
