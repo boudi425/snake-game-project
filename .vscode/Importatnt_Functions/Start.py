@@ -49,4 +49,3 @@ def Open_Url(file_name="Game_Web.html"):
     absolute_path = os.path.abspath(html_file_path)
     # Open the file in the default web browser
     webbrowser.open(f"file://{absolute_path}")
-Open_Url()
